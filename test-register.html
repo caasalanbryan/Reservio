@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservio Registration Test</title>
+</head>
+<body>
+
+<h2>Reservio - MySQL Registration Test</h2>
+
+<button onclick="testRegister()">
+    Test Registration
+</button>
+
+<pre id="result"></pre>
+
+<script>
+async function testRegister() {
+    const resultBox = document.getElementById("result");
+
+    const testUser = {
+        username: "teststaff_" + Date.now(),
+        password: "TestPassword123!",
+        name: "Test Staff",
+        email: "teststaff_" + Date.now() + "@example.com",
+        phone: "09123456789",
+        address: "Villanueva, Misamis Oriental",
+        birthday: "2000-01-01",
+        gender: "Male",
+        bio: "Test account"
+    };
+
+    try {
+        const response = await fetch(
+            "api.php?action=register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(testUser)
+            }
+        );
+
+       
+
+const rawResponse = await response.text();
+
+resultBox.textContent =
+    "HTTP Status: " + response.status +
+    "\n\nPHP Response:\n" + rawResponse;
+
+return;
+
+
+resultBox.textContent =
+    "HTTP Status: " + response.status +
+    "\n\nPHP Response:\n" + rawResponse;
+
+return;
+
+        resultBox.textContent = JSON.stringify(
+            {
+                httpStatus: response.status,
+                response: result,
+                username: testUser.username
+            },
+            null,
+            2
+        );
+
+    } catch (error) {
+        resultBox.textContent =
+            "Registration test failed: " + error.message;
+    }
+}
+</script>
+
+</body>
+</html>

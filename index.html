@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Reservio | Public Facility Reservation System</title>
+
+  <link rel="icon" type="image/png" href="reservio-Logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- LOGIN AND REGISTRATION -->
+  <div id="auth" class="auth">
+
+    <section class="hero">
+      <img
+        src="reservio-Logo.png"
+        alt="Reservio Logo"
+        class="reservio-logo"
+      >
+
+      <h1 class="hero-subtitle">
+        Public Facility Reservation System
+      </h1>
+
+      <p class="hero-tagline">
+        Reserve • Organize • Serve
+      </p>
+    </section>
+
+    <section class="auth-panel">
+
+      <div class="tabs">
+        <button
+          id="loginTab"
+          type="button"
+          class="active"
+          onclick="authTab('login')"
+        >
+          Login
+        </button>
+
+        <button
+          id="registerTab"
+          type="button"
+          onclick="authTab('register')"
+        >
+          Create Account
+        </button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" onsubmit="login(event)">
+        <h2>Welcome Back!</h2>
+        <p>Enter your credentials to continue.</p>
+
+        <!-- USERNAME -->
+        <label for="loginUser">Username</label>
+        <input
+          id="loginUser"
+          type="text"
+          placeholder="Enter username"
+          required
+        >
+
+        <div
+          id="loginUsernameError"
+          class="login-field-error hidden"
+        >
+          <span class="warning-icon">!</span>
+          <span>The username you entered does not exist.</span>
+        </div>
+
+        <!-- PASSWORD -->
+        <label for="loginPass">Password</label>
+
+        <div class="password">
+          <input
+            id="loginPass"
+            type="password"
+            placeholder="Enter password"
+            required
+          >
+
+          <button
+            type="button"
+            onclick="togglePass('loginPass')"
+          >
+            👁
+          </button>
+        </div>
+
+        <div
+          id="loginPasswordError"
+          class="login-field-error hidden"
+        >
+          <span class="warning-icon">!</span>
+          <span>The password you entered is incorrect.</span>
+        </div>
+
+        <button class="primary" type="submit">
+          Login
+        </button>
+
+        <button
+          class="link"
+          type="button"
+          onclick="forgotPassword()"
+        >
+          Forgot password?
+        </button>
+      </form>
+
+      <!-- CREATE ACCOUNT FORM -->
+      <form
+        id="registerForm"
+        class="hidden"
+        onsubmit="register(event)"
+      >
+        <h2>Create Account</h2>
+        <p>Fill out the information below.</p>
+
+        <label for="regName">Full Name</label>
+        <input id="regName" type="text" required>
+
+        <div class="two">
+          <div>
+            <label for="regBirthday">Birthday</label>
+            <input id="regBirthday" type="date" required>
+          </div>
+
+          <div>
+            <label for="regGender">Gender</label>
+            <select id="regGender" required>
+              <option value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="regAddress">Address</label>
+        <input id="regAddress" type="text" required>
+
+        <label for="regPhone">Contact Number</label>
+        <input id="regPhone" type="tel" required>
+
+        <label for="regEmail">Email Address</label>
+        <input id="regEmail" type="email" required>
+
+        <label for="regBio">Bio / Description</label>
+        <textarea id="regBio" rows="3"></textarea>
+
+        <label for="regUser">Username</label>
+        <input id="regUser" type="text" required>
+
+        <label for="regPass">Password</label>
+        <div class="password">
+          <input
+            id="regPass"
+            type="password"
+            minlength="6"
+            required
+          >
+          <button
+            type="button"
+            onclick="togglePass('regPass')"
+          >
+            👁
+          </button>
+        </div>
+
+        <label for="regConfirm">Confirm Password</label>
+        <div class="password">
+          <input
+            id="regConfirm"
+            type="password"
+            minlength="6"
+            required
+          >
+          <button
+            type="button"
+            onclick="togglePass('regConfirm')"
+          >
+            👁
+          </button>
+        </div>
+
+        <button class="primary" type="submit">
+          Create Account
+        </button>
+      </form>
+
+    </section>
+  </div>
+
+  <!-- MAIN APPLICATION -->
+  <div id="app" class="app hidden">
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <img
+          src="reservio-Logo.png"
+          alt="Reservio Logo"
+          class="sidebar-logo"
+        >
+
+        <div>
+          <strong>Reservio</strong>
+          <br>
+          <small>Facility Reservation</small>
+        </div>
+      </div>
+
+      <nav id="nav"></nav>
+
+    </aside>
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <!-- MOBILE MENU -->
+        <div class="topbar-left">
+
+          <button
+            class="mobile-menu-toggle"
+            id="mobileMenuToggle"
+            type="button"
+            onclick="toggleMobileNav()"
+            aria-label="Toggle navigation"
+            aria-controls="nav"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+        </div>
+
+        <!-- ADMINISTRATOR PROFILE -->
+        <div class="header-right">
+
+          <div class="profile-wrap">
+
+            <button
+              class="profile-trigger"
+              id="profileTrigger"
+              type="button"
+              onclick="toggleProfileMenu(event)"
+              aria-expanded="false"
+            >
+              <span
+                class="profile-avatar"
+                id="profileAvatar"
+              >
+                U
+              </span>
+
+              <span class="profile-copy">
+                <strong id="userBadge">User</strong>
+                <small id="userRoleBadge">System User</small>
+              </span>
+
+              <span class="profile-chevron">⌄</span>
+            </button>
+
+            
+<!-- PROFILE DROPDOWN -->
+<div class="profile-menu hidden" id="profileMenu">
+
+    <!-- USER INFORMATION -->
+    <div class="profile-menu-heading">
+        <strong id="profileMenuName">User Name</strong>
+        <small id="profileMenuUsername">user@gmail.com</small>
+    </div>
+
+    <!-- ACCOUNT -->
+    <button
+        type="button"
+        onclick="go('accounts'); closeProfileMenu()">
+        My Account
+    </button>
+
+    <!-- DIVIDER -->
+    <div class="profile-menu-divider"></div>
+
+    <!-- LOGOUT -->
+    <button
+        type="button"
+        class="profile-logout"
+        onclick="logout()">
+        Log Out
+    </button>
+
+</div>
+
+
+          </div>
+
+        </div>
+
+      </header>
+
+      <!-- MOBILE NAVIGATION OVERLAY -->
+      <div
+        class="mobile-nav-backdrop"
+        id="mobileNavBackdrop"
+        onclick="closeMobileNav()"
+      ></div>
+
+      <!-- MAIN PAGE CONTENT -->
+      <div id="content"></div>
+
+      <div id="modalContent"></div>
+
+    </main>
+
+  </div>
+
+  <!-- JAVASCRIPT - LOCAL STORAGE -->
+ <script src="script.js"></script>
+
+ 
+<!-- RESERVIO PROFESSIONAL MESSAGE BOX -->
+<div id="reservioMessageOverlay" class="rv-message-overlay" hidden>
+  <div class="rv-message-box" role="alertdialog"
+       aria-modal="true"
+       aria-labelledby="rvMessageTitle"
+       aria-describedby="rvMessageText">
+
+    <div id="rvMessageIcon" class="rv-message-icon"></div>
+
+    <h2 id="rvMessageTitle"></h2>
+    <p id="rvMessageText"></p>
+
+    <div class="rv-message-actions">
+      <button id="rvMessageCancel" type="button"
+              class="rv-btn-cancel" hidden>
+        Cancel
+      </button>
+      <button id="rvMessageConfirm" type="button"
+              class="rv-btn-confirm">
+        OK
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div id="modernPopup" class="modern-popup-overlay" hidden>
+  <div class="modern-popup" role="dialog"
+       aria-modal="true"
+       aria-labelledby="modernPopupTitle"
+       aria-describedby="modernPopupMessage">
+
+    <div id="modernPopupIcon" class="modern-popup-icon">
+      ✓
+    </div>
+
+    <h2 id="modernPopupTitle">Notification</h2>
+
+    <p id="modernPopupMessage"></p>
+
+    <div class="modern-popup-buttons">
+      <button id="modernPopupCancel"
+              class="modern-popup-cancel"
+              type="button">
+        Cancel
+      </button>
+
+      <button id="modernPopupOK"
+              class="modern-popup-ok"
+              type="button">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
